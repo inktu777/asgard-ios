@@ -1,0 +1,238 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.1 effective-5.10 (swiftlang-6.1.0.110.21 clang-1700.0.13.3)
+// swift-module-flags: -target arm64-apple-ios13.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -module-name AsgardCore
+// swift-module-flags-ignorable:  -interface-compiler-version 6.1
+import Foundation
+import Swift
+import UIKit
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+@_hasMissingDesignatedInitializers final public class ChatbotAPIManager {
+  public static let shared: AsgardCore.ChatbotAPIManager
+  final public func configure(with config: AsgardCore.ChatbotAPIConfig, delegate: (any AsgardCore.ChatbotAPIDelegate)? = nil)
+  final public func sendMessage(_ content: Swift.String)
+  @objc deinit
+}
+public enum JSONUtils {
+  public enum JSONError : Swift.Error {
+    case invalidString
+    case decodeFailed(any Swift.Error)
+    case encodeFailed(any Swift.Error)
+    case serializationFailed(any Swift.Error)
+  }
+  public static func stringify<T>(_ object: T, prettyPrinted: Swift.Bool = true) -> Swift.String? where T : Swift.Decodable, T : Swift.Encodable
+  public static func parse<T>(_ jsonString: Swift.String, as type: T.Type) -> T? where T : Swift.Decodable, T : Swift.Encodable
+  public static func parse<T>(_ data: Foundation.Data, as type: T.Type) -> T? where T : Swift.Decodable, T : Swift.Encodable
+  public static func toDictionary<T>(_ object: T) -> [Swift.String : Any]? where T : Swift.Decodable, T : Swift.Encodable
+}
+@objc public enum LogType : Swift.Int {
+  case error
+  case warning
+  case info
+  case debug
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public enum LogDisplayLevel : Swift.Int {
+  case none
+  case normal
+  case full
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class Log : ObjectiveC.NSObject {
+  @objc public static var displayLevel: AsgardCore.LogDisplayLevel
+  @objc public static func log(_ type: AsgardCore.LogType, _ message: Swift.String)
+  @objc public static func debug(_ message: Swift.String)
+  @objc public static func info(_ message: Swift.String)
+  @objc public static func warning(_ message: Swift.String)
+  @objc public static func error(_ message: Swift.String)
+  @objc override dynamic public init()
+  @objc deinit
+}
+public struct ChatbotAPIConfig {
+  public let customChannelId: Swift.String?
+  public let debugMode: Swift.Bool
+  public init(customChannelId: Swift.String? = nil, debugMode: Swift.Bool = false)
+}
+public enum LogManager {
+  public static func store(_ log: [Swift.String : Swift.String])
+  public static func loadLogs() -> [[Swift.String : Swift.String]]
+  public static func clearLogs()
+  public static func exportLogs() -> Swift.String
+}
+public struct ChatbotConfig {
+  public let title: Swift.String
+  public let avatar: Swift.String?
+  public let botTypingPlaceholder: Swift.String
+  public let customChannelId: Swift.String?
+  public let debugMode: Swift.Bool
+  public let initMessages: [AsgardCore.BotChatMessage]
+  public init(title: Swift.String = "Asgard AI Chatbot", avatar: Swift.String? = nil, botTypingPlaceholder: Swift.String = "Bot is typing...", customChannelId: Swift.String? = nil, debugMode: Swift.Bool = false, initMessages: [AsgardCore.BotChatMessage] = [])
+}
+public typealias ExecutionErrorHandler = (any Swift.Error) -> Swift.Void
+public typealias TransformedPayloadHandler = ([Swift.String : Any]) -> Swift.Void
+@objc @objcMembers public class AsgardConfig : ObjectiveC.NSObject {
+  @objc final public let apiKey: Swift.String
+  @objc final public let endpoint: Swift.String
+  @objc final public let botProviderEndpoint: Swift.String
+  @objc public init(apiKey: Swift.String, endpoint: Swift.String, botProviderEndpoint: Swift.String)
+  @objc deinit
+}
+public enum ChatType : Swift.String, Swift.Hashable, Swift.Codable {
+  case initialize
+  case rank
+  case recommend
+  case `default`
+  case events
+  case links
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct ChatBotElement : Swift.Codable, Swift.Hashable {
+  public var type: AsgardCore.ChatType?
+  public var message: AsgardCore.BotChatMessage?
+  public var events: [AsgardCore.ChatEvent]?
+  public var questions: [AsgardCore.ChatQuestion]?
+  public var messageType: AsgardCore.MessageType?
+  public var error: AsgardCore.ErrorInfo?
+  public var sessionId: Swift.String?
+  public var token: Swift.String?
+  public init()
+  public func encode(to encoder: any Swift.Encoder) throws
+  public static func == (lhs: AsgardCore.ChatBotElement, rhs: AsgardCore.ChatBotElement) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct BotChatMessage : Swift.Codable, Swift.Hashable {
+  public var text: Swift.String?
+  public var messageId: Swift.String?
+  public init()
+  public static func == (lhs: AsgardCore.BotChatMessage, rhs: AsgardCore.BotChatMessage) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public func encode(to encoder: any Swift.Encoder) throws
+  public var hashValue: Swift.Int {
+    get
+  }
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct ChatEvent : Swift.Codable, Swift.Hashable {
+  public var title: Swift.String?
+  public var url: Swift.String?
+  public var image: Swift.String?
+  public init()
+  public static func == (lhs: AsgardCore.ChatEvent, rhs: AsgardCore.ChatEvent) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public func encode(to encoder: any Swift.Encoder) throws
+  public var hashValue: Swift.Int {
+    get
+  }
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct ChatQuestion : Swift.Codable, Swift.Hashable {
+  public var text: Swift.String?
+  public var url: Swift.String?
+  public init()
+  public init(from decoder: any Swift.Decoder) throws
+  public func encode(to encoder: any Swift.Encoder) throws
+  public static func == (lhs: AsgardCore.ChatQuestion, rhs: AsgardCore.ChatQuestion) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public struct ErrorInfo : Swift.Codable, Swift.Hashable {
+  public var code: Swift.Int?
+  public var message: Swift.String?
+  public init()
+  public static func == (lhs: AsgardCore.ErrorInfo, rhs: AsgardCore.ErrorInfo) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public func encode(to encoder: any Swift.Encoder) throws
+  public var hashValue: Swift.Int {
+    get
+  }
+  public init(from decoder: any Swift.Decoder) throws
+}
+public enum MessageType : Swift.String, Swift.Codable, Swift.Hashable {
+  case `default`
+  case delta
+  case complete
+  case done
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers final public class AsgardManager {
+  public static let shared: AsgardCore.AsgardManager
+  final public func initialize(apiKey: Swift.String, endpoint: Swift.String, botProviderEndpoint: Swift.String)
+  final public func setLogLevel(_ level: AsgardCore.LogDisplayLevel)
+  final public func getVersion() -> Swift.String
+  final public func getConfiguration() -> AsgardCore.AsgardConfig?
+  final public func isServiceInitialized() -> Swift.Bool
+  final public func onExecutionError(_ handler: @escaping AsgardCore.ExecutionErrorHandler)
+  final public func onTransformedPayload(_ handler: @escaping AsgardCore.TransformedPayloadHandler)
+  final public func processPayload(_ payload: [Swift.String : Any]) throws
+  @objc deinit
+}
+public enum AsgardError : Swift.Error {
+  case notInitialized
+  case invalidApiKey
+  case invalidEndpoint
+  case invalidBotProviderEndpoint
+  case serviceError(Swift.String)
+  case tokenExpired
+  case chatLimitExceeded
+  case invalidResponse
+  case invalidURL
+  public var localizedDescription: Swift.String {
+    get
+  }
+}
+public struct ChatbotUIConfig {
+  public let title: Swift.String
+  public let avatar: Swift.String?
+  public let botTypingPlaceholder: Swift.String
+  public let initMessages: [AsgardCore.BotChatMessage]
+  public init(title: Swift.String = "Asgard AI Chatbot", avatar: Swift.String? = nil, botTypingPlaceholder: Swift.String = "Bot is typing...", initMessages: [AsgardCore.BotChatMessage] = [])
+}
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency final public class ChatbotView : UIKit.UIView {
+  @_Concurrency.MainActor @preconcurrency final public let config: AsgardCore.ChatbotUIConfig
+  @_Concurrency.MainActor @preconcurrency public init(config: AsgardCore.ChatbotUIConfig)
+  @objc deinit
+}
+final public class ChatbotViewModel : AsgardCore.ChatbotAPIDelegate {
+  final public var onMessageReceived: ((AsgardCore.BotChatMessage) -> Swift.Void)?
+  final public var onError: ((any Swift.Error) -> Swift.Void)?
+  public init(config: AsgardCore.ChatbotAPIConfig)
+  final public func sendMessage(_ content: Swift.String)
+  final public func chatbotDidReceiveMessage(_ message: AsgardCore.BotChatMessage)
+  final public func chatbotDidReceiveError(_ error: any Swift.Error)
+  @objc deinit
+}
+public protocol ChatbotAPIDelegate : AnyObject {
+  func chatbotDidReceiveMessage(_ message: AsgardCore.BotChatMessage)
+  func chatbotDidReceiveError(_ error: any Swift.Error)
+}
+extension AsgardCore.LogType : Swift.Equatable {}
+extension AsgardCore.LogType : Swift.Hashable {}
+extension AsgardCore.LogType : Swift.RawRepresentable {}
+extension AsgardCore.LogDisplayLevel : Swift.Equatable {}
+extension AsgardCore.LogDisplayLevel : Swift.Hashable {}
+extension AsgardCore.LogDisplayLevel : Swift.RawRepresentable {}
+extension AsgardCore.ChatType : Swift.RawRepresentable {}
+extension AsgardCore.MessageType : Swift.RawRepresentable {}
