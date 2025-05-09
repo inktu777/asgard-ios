@@ -1,7 +1,8 @@
 Pod::Spec.new do |s|
-  s.name         = 'Asgard-ios'
+  s.name         = 'AsgardCore'
   s.version      = '0.0.1'
-  s.summary      = 'AsgardCore'
+  s.summary      = 'AsgardCore - iOS SDK for Asgard AI Platform'
+  s.description  = 'AsgardCore is a powerful iOS framework that provides core functionality and chatbot features for Asgard AI Platform.'
   s.homepage     = 'https://www.asgard-ai.com/'
   s.ios.deployment_target = '13.0'
   s.platform     = :ios, '13.0'
@@ -10,14 +11,13 @@ Pod::Spec.new do |s|
     :file => 'LICENSE' 
   }
   s.author       = {
-    'YourName' => 'ink.tu' 
+    'ink.tu' => 'ink.tu@asgard-ai.com' 
   }
   s.source       = {
     :git => 'https://github.com/inktu777/asgard-ios.git',
     :tag => "#{s.version}" 
   }
 
-  s.framework = "UIKit"
-  s.source_files = 'AsgardCore.xcframework'
+  s.vendored_frameworks = 'AsgardCore.xcframework'
   s.requires_arc = true
 end
